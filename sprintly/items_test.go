@@ -173,3 +173,43 @@ func TestItems_Get(t *testing.T) {
 
 	ensureEqual(t, item, &testingTask)
 }
+
+func TestItems_Update(t *testing.T) {
+	client, server, mux := setup()
+	defer server.Close()
+
+	args := ItemUpdateArgs{
+		Type:        testingTask.Type,
+		Title:       testingTask.Title,
+		Who:         "user",
+		What:        "not to be able to move un-scored items out of the backlog",
+		Why:         "it does not make any sense",
+		Description: testingTask.Description,
+		Score:       testingTask.Score,
+		Status:      testingTask.Status,
+		AssignedTo:  testingUser.Id,
+		Tags:        testingTask.Tags,
+		Parent:      99,
+	}
+
+	mux.HandleFunc("/products/1/items/188.json", func(w http.ResponseWriter, r *http.Request) {
+		ensureMethod(t, r, "POST")
+
+		var got ItemUpdateArgs
+		if err := json.NewDecoder(r.Body).Decode(&got); err != nil {
+			t.Error(err)
+			return
+		}
+
+		ensureEqual(t, &got, &args)
+		fmt.Fprint(w, testingTaskString)
+	})
+
+	item, _, err := client.Items.Update(1, 188, &args)
+	if err != nil {
+		t.Errorf("Items.Create failed: %v", err)
+		return
+	}
+
+	ensureEqual(t, item, &testingTask)
+}

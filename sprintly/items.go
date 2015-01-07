@@ -92,6 +92,23 @@ type ItemCreateArgs struct {
 	Tags        []string   `json:"tags,omitempty"`
 }
 
+// ItemUpdateArgs represent the arguments that can be passed into Items.Update.
+//
+// This struct is the same as ItemCreateArgs, just the Parent field is extra.
+type ItemUpdateArgs struct {
+	Type        string     `json:"type,omitempty"`
+	Title       string     `json:"title,omitempty"`
+	Who         string     `json:"who,omitempty"`
+	What        string     `json:"what,omitempty"`
+	Why         string     `json:"why,omitempty"`
+	Description string     `json:"description,omitempty"`
+	Score       ItemScore  `json:"score,emitempty"`
+	Status      ItemStatus `json:"status,emitempty"`
+	AssignedTo  int        `json:"assigned_to,omitempty"`
+	Tags        []string   `json:"tags,omitempty"`
+	Parent      int        `json:"parent,omitempty"`
+}
+
 // ItemListArgs represents the arguments for the List method.
 type ItemListArgs struct {
 	Type       []ItemType   `url:"type,comma,omitempty"`
@@ -170,6 +187,38 @@ func (srv ItemsService) Get(productId, itemNumber int) (*Item, *http.Response, e
 	u := fmt.Sprintf("products/%v/items/%v.json", productId, itemNumber)
 
 	req, err := srv.client.NewRequest("GET", u, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var item Item
+	resp, err := srv.client.Do(req, &item)
+	if err != nil {
+		switch resp.StatusCode {
+		case 400:
+			return nil, nil, &ErrItems400{err.(*ErrAPI)}
+		case 404:
+			return nil, nil, &ErrItems404{err.(*ErrAPI)}
+		default:
+			return nil, resp, err
+		}
+	}
+
+	return &item, resp, nil
+}
+
+// Update can be used to update the item identified by the given item number.
+//
+// See https://sprintly.uservoice.com/knowledgebase/articles/98412-items
+func (srv ItemsService) Update(
+	productId int,
+	itemNumber int,
+	args *ItemUpdateArgs,
+) (*Item, *http.Response, error) {
+
+	u := fmt.Sprintf("products/%v/items/%v.json", productId, itemNumber)
+
+	req, err := srv.client.NewRequest("POST", u, args)
 	if err != nil {
 		return nil, nil, err
 	}
