@@ -238,3 +238,23 @@ func (srv ItemsService) Update(
 
 	return &item, resp, nil
 }
+
+// ListChildren can be used to list children of the given item.
+//
+// See https://sprintly.uservoice.com/knowledgebase/articles/98412-items
+func (srv ItemsService) ListChildren(productId, itemNumber int) ([]Item, *http.Response, error) {
+	u := fmt.Sprintf("products/%v/items/%v/children.json", productId, itemNumber)
+
+	req, err := srv.client.NewRequest("GET", u, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var items []Item
+	resp, err := srv.client.Do(req, &items)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return items, resp, nil
+}

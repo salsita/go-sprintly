@@ -38,6 +38,8 @@ var testingTask = Item{
 	Type:       "task",
 }
 
+var testingTaskSlice []Item
+
 func init() {
 	layout := "2006-01-02T15:04:05-07:00"
 	acceptedAt, err := time.Parse(layout, "2013-06-14T22:52:07+00:00")
@@ -58,6 +60,8 @@ func init() {
 		AcceptedAt: &acceptedAt,
 		ClosedAt:   &closedAt,
 	}
+
+	testingTaskSlice = []Item{testingTask}
 }
 
 var testingTaskString = `
@@ -153,7 +157,7 @@ func TestItems_List(t *testing.T) {
 		return
 	}
 
-	ensureEqual(t, items, []Item{testingTask})
+	ensureEqual(t, items, testingTaskSlice)
 }
 
 func TestItems_Get(t *testing.T) {
@@ -212,4 +216,22 @@ func TestItems_Update(t *testing.T) {
 	}
 
 	ensureEqual(t, item, &testingTask)
+}
+
+func TestItems_ListChildren(t *testing.T) {
+	client, server, mux := setup()
+	defer server.Close()
+
+	mux.HandleFunc("/products/1/items/188/children.json", func(w http.ResponseWriter, r *http.Request) {
+		ensureMethod(t, r, "GET")
+		fmt.Fprint(w, testingTaskSliceString)
+	})
+
+	items, _, err := client.Items.ListChildren(1, 188)
+	if err != nil {
+		t.Errorf("Items.ListChildren failed: %v", err)
+		return
+	}
+
+	ensureEqual(t, items, testingTaskSlice)
 }
