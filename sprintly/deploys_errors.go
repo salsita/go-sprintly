@@ -4,6 +4,14 @@ import (
 	"fmt"
 )
 
+type ErrDeploys400 struct {
+	Err *ErrAPI
+}
+
+func (err *ErrDeploys400) Error() string {
+	return fmt.Sprintf("%v (items not found)", err.Err)
+}
+
 type ErrDeploys403 struct {
 	Err *ErrAPI
 }

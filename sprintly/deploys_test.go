@@ -50,3 +50,34 @@ func TestDeploys_List(t *testing.T) {
 
 	ensureEqual(t, deploys, testingDeploySlice)
 }
+
+func TestDeploys_Create(t *testing.T) {
+	client, server, mux := setup()
+	defer server.Close()
+
+	args := DeployCreateArgs{
+		Environment: "staging",
+		ItemNumbers: []int{1, 2, 3, 4, 5},
+	}
+
+	mux.HandleFunc("/products/1/deploys.json", func(w http.ResponseWriter, r *http.Request) {
+		ensureMethod(t, r, "POST")
+
+		var got DeployCreateArgs
+		if err := json.NewDecoder(r.Body).Decode(&got); err != nil {
+			t.Error(err)
+			return
+		}
+
+		ensureEqual(t, &got, &args)
+		fmt.Fprint(w, testingTaskString)
+	})
+
+	item, _, err := client.Deploys.Create(testingProduct.Id, &args)
+	if err != nil {
+		t.Errorf("Deploys.Create failed: %v", err)
+		return
+	}
+
+	ensureEqual(t, item, &testingTask)
+}

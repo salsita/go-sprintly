@@ -54,3 +54,37 @@ func (srv DeploysService) List(productId int, opt *DeployListArgs) ([]Deploy, *h
 
 	return deploys, resp, nil
 }
+
+// Create can be used to create a new deployment for the given product.
+//
+// See https://sprintly.uservoice.com/knowledgebase/articles/138392-deploys
+func (srv DeploysService) Create(productId int, args *DeployCreateArgs) ([]Deploy, *http.Response, error) {
+	u := fmt.Sprintf("products/%v/deploys.json", productId)
+	u, err := addOptions(u, args)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req, err := srv.client.NewRequest("POST", u, args)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var deploys []Deploy
+	resp, err := srv.client.Do(req, &deploys)
+	if err != nil {
+		switch resp.StatusCode {
+		case 400:
+			return nil, nil, &ErrDeploys400{err.(*ErrAPI)}
+		case 403:
+			return nil, nil, &ErrDeploys403{err.(*ErrAPI)}
+		case 404:
+			return nil, nil, &ErrDeploys404{err.(*ErrAPI)}
+		default:
+			return nil, resp, err
+		}
+
+	}
+
+	return deploys, resp, nil
+}
