@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"testing"
+
+	"github.com/gorilla/schema"
 )
 
 var testingDeploy = Deploy{
@@ -16,7 +18,7 @@ var testingDeploy = Deploy{
 	},
 }
 
-var testingDeployString = `
+var testingDeployJson = `
 {
 	"environment": "staging",
 	"items": [
@@ -29,8 +31,8 @@ var testingDeployString = `
 `
 
 var (
-	testingDeploySlice       = []Deploy{testingDeploy}
-	testingDeploySliceString = fmt.Sprintf("[%v]", testingDeployString)
+	testingDeploySlice     = []Deploy{testingDeploy}
+	testingDeploySliceJson = fmt.Sprintf("[%v]", testingDeployString)
 )
 
 func TestDeploys_List(t *testing.T) {
@@ -39,7 +41,7 @@ func TestDeploys_List(t *testing.T) {
 
 	mux.HandleFunc("/products/1/deploys.json", func(w http.ResponseWriter, r *http.Request) {
 		ensureMethod(t, r, "GET")
-		fmt.Fprint(w, testingDeploySliceString)
+		fmt.Fprint(w, testingDeploySliceJson)
 	})
 
 	deploys, _, err := client.Deploys.List(1, nil)
@@ -63,21 +65,33 @@ func TestDeploys_Create(t *testing.T) {
 	mux.HandleFunc("/products/1/deploys.json", func(w http.ResponseWriter, r *http.Request) {
 		ensureMethod(t, r, "POST")
 
-		var got DeployCreateArgs
-		if err := json.NewDecoder(r.Body).Decode(&got); err != nil {
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
 			t.Error(err)
 			return
 		}
 
-		ensureEqual(t, &got, &args)
-		fmt.Fprint(w, testingTaskString)
+		values, err := url.ParseQuery(body.String())
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		var receivedArgs DeployCreateArgs
+		if err := schema.NewDecoder().Decode(&receivedArgs, values); err != nil {
+			t.Error(err)
+			return
+		}
+
+		ensureEqual(t, &receivedArgs, &args)
+		fmt.Fprint(w, testingDeployJson)
 	})
 
-	item, _, err := client.Deploys.Create(testingProduct.Id, &args)
+	deploy, _, err := client.Deploys.Create(1, &args)
 	if err != nil {
 		t.Errorf("Deploys.Create failed: %v", err)
 		return
 	}
 
-	ensureEqual(t, item, &testingTask)
+	ensureEqual(t, &deploy, &testingDeploy)
 }
