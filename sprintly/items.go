@@ -163,18 +163,29 @@ func (srv ItemsService) List(productId int, opt *ItemListArgs) ([]Item, *http.Re
 	return items, resp, nil
 }
 
-type ErrItems400 struct {
-	Err *ErrAPI
-}
+// Get can be used to get the item identified by the given item number.
+//
+// See https://sprintly.uservoice.com/knowledgebase/articles/98412-items
+func (srv ItemsService) Get(productId, itemNumber int) (*Item, *http.Response, error) {
+	u := fmt.Sprintf("products/%v/items/%v.json", productId, itemNumber)
 
-func (err *ErrItems400) Error() string {
-	return fmt.Sprintf("%v (invalid type, status or order_by)", err.Err)
-}
+	req, err := srv.client.NewRequest("GET", u, nil)
+	if err != nil {
+		return nil, nil, err
+	}
 
-type ErrItems404 struct {
-	Err *ErrAPI
-}
+	var item Item
+	resp, err := srv.client.Do(req, &item)
+	if err != nil {
+		switch resp.StatusCode {
+		case 400:
+			return nil, nil, &ErrItems400{err.(*ErrAPI)}
+		case 404:
+			return nil, nil, &ErrItems404{err.(*ErrAPI)}
+		default:
+			return nil, resp, err
+		}
+	}
 
-func (err *ErrItems404) Error() string {
-	return fmt.Sprintf("%v (assigned_to or created_by users unknown or invalid)", err.Err)
+	return &item, resp, nil
 }

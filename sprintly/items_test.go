@@ -155,3 +155,21 @@ func TestItems_List(t *testing.T) {
 
 	ensureEqual(t, items, []Item{testingTask})
 }
+
+func TestItems_Get(t *testing.T) {
+	client, server, mux := setup()
+	defer server.Close()
+
+	mux.HandleFunc("/products/1/items/188.json", func(w http.ResponseWriter, r *http.Request) {
+		ensureMethod(t, r, "GET")
+		fmt.Fprint(w, testingTaskString)
+	})
+
+	item, _, err := client.Items.Get(1, 188)
+	if err != nil {
+		t.Errorf("Items.Get failed: %v", err)
+		return
+	}
+
+	ensureEqual(t, item, &testingTask)
+}
