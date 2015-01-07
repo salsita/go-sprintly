@@ -2,7 +2,7 @@
 
 |||||||
 | ---------- |:----------:| ---------- |:----------:| ---------- |:----------:|
-| Build Status | [![Circle CI](https://circleci.com/gh/salsita/go-sprintly/tree/master.svg?style=svg)](https://circleci.com/gh/salsita/go-sprintly/tree/master) | Test Coverage | [![Coverage Status](https://coveralls.io/repos/salsita/go-sprintly/badge.png?branch=circleci)](https://coveralls.io/r/salsita/go-sprintly?branch=circleci) | GoDoc | [![GoDoc](https://godoc.org/github.com/salsita/go-sprintly/sprintly?status.png)](http://godoc.org/github.com/salsita/go-sprintly/sprintly) |
+| Build Status | [![Circle CI](https://circleci.com/gh/salsita/go-sprintly/tree/master.svg?style=svg)](https://circleci.com/gh/salsita/go-sprintly/tree/master) | Test Coverage | [![Coverage Status](https://coveralls.io/repos/salsita/go-sprintly/badge.png?branch=master)](https://coveralls.io/r/salsita/go-sprintly?branch=master) | GoDoc | [![GoDoc](https://godoc.org/github.com/salsita/go-sprintly/sprintly?status.png)](http://godoc.org/github.com/salsita/go-sprintly/sprintly) |
 
 ## Overview ##
 
