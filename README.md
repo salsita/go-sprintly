@@ -2,7 +2,7 @@
 
 |||
 | ---------- |:----------:|
-| GoDoc | [![GoDoc](https://godoc.org/github.com/tchap/go-sprintly/sprintly?status.png)](http://godoc.org/github.com/tchap/go-sprintly/sprintly) |
+| GoDoc | [![GoDoc](https://godoc.org/github.com/salsita/go-sprintly/sprintly?status.png)](http://godoc.org/github.com/salsita/go-sprintly/sprintly) |
 
 ## Overview ##
 
