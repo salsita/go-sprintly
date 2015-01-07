@@ -1,0 +1,9 @@
+dependencies:
+  override:
+    - "go get github.com/kr/pretty"
+    - "go get github.com/google/go-querystring/query"
+    - "go get github.com/mattn/goveralls"
+test:
+  override:
+    - "ln -s \"$HOME/go-sprintly\" \"$HOME/.go_workspace/src/go-sprintly\""
+    - "cd sprintly && goveralls -package=go-sprintly/sprintly -repotoken=$COVERALLS_TOKEN -service=circleci"
