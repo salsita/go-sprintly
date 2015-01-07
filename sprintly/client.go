@@ -32,6 +32,9 @@ type Client struct {
 
 	// The Items service.
 	Items *ItemsService
+
+	// The Deploys service.
+	Deploys *DeploysService
 }
 
 // NewClient returns a new API client instance that uses
@@ -45,6 +48,7 @@ func NewClient(username, token string) *Client {
 		userAgent: DefaultUserAgent,
 	}
 	client.Items = newItemsService(client)
+	client.Deploys = newDeploysService(client)
 	return client
 }
 

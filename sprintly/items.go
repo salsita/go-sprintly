@@ -6,10 +6,6 @@ import (
 	"time"
 )
 
-type ItemsService struct {
-	client *Client
-}
-
 type ItemType string
 
 const (
@@ -50,6 +46,11 @@ const (
 	ItemOrderingActive                 = "active"
 	ItemOrderingAbandoned              = "abandoned"
 )
+
+// ItemsService holds all the methods for manipulating Sprintly items.
+type ItemsService struct {
+	client *Client
+}
 
 func newItemsService(client *Client) *ItemsService {
 	return &ItemsService{client}
