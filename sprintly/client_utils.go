@@ -15,6 +15,10 @@ import (
 )
 
 func appendArgs(u *url.URL, args interface{}) error {
+	if args == nil {
+		return nil
+	}
+
 	v := reflect.ValueOf(args)
 	if v.Kind() == reflect.Ptr && v.IsNil() {
 		return nil
@@ -30,6 +34,10 @@ func appendArgs(u *url.URL, args interface{}) error {
 }
 
 func encodeArgs(args interface{}) (io.Reader, error) {
+	if args == nil {
+		return nil, nil
+	}
+
 	v := reflect.ValueOf(args)
 	if v.Kind() == reflect.Ptr && v.IsNil() {
 		return nil, nil
