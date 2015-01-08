@@ -95,5 +95,5 @@ func TestDeploys_Create(t *testing.T) {
 		return
 	}
 
-	ensureEqual(t, &deploy, &testingDeploy)
+	ensureEqual(t, deploy, &testingDeploy)
 }

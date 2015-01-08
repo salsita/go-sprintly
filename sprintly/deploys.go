@@ -59,7 +59,7 @@ type DeployCreateArgs struct {
 // Create can be used to create a new deployment for the given product.
 //
 // See https://sprintly.uservoice.com/knowledgebase/articles/138392-deploys
-func (srv DeploysService) Create(productId int, args *DeployCreateArgs) ([]Deploy, *http.Response, error) {
+func (srv DeploysService) Create(productId int, args *DeployCreateArgs) (*Deploy, *http.Response, error) {
 	u := fmt.Sprintf("products/%v/deploys.json", productId)
 
 	req, err := srv.client.NewPostRequest(u, args)
@@ -67,8 +67,8 @@ func (srv DeploysService) Create(productId int, args *DeployCreateArgs) ([]Deplo
 		return nil, nil, err
 	}
 
-	var deploys []Deploy
-	resp, err := srv.client.Do(req, &deploys)
+	var deploy Deploy
+	resp, err := srv.client.Do(req, &deploy)
 	if err != nil {
 		switch resp.StatusCode {
 		case 400:
@@ -83,5 +83,5 @@ func (srv DeploysService) Create(productId int, args *DeployCreateArgs) ([]Deplo
 
 	}
 
-	return deploys, resp, nil
+	return &deploy, resp, nil
 }
