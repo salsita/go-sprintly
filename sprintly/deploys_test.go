@@ -2,7 +2,9 @@ package sprintly
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/gorilla/schema"
@@ -32,7 +34,7 @@ var testingDeployJson = `
 
 var (
 	testingDeploySlice     = []Deploy{testingDeploy}
-	testingDeploySliceJson = fmt.Sprintf("[%v]", testingDeployString)
+	testingDeploySliceJson = fmt.Sprintf("[%v]", testingDeployJson)
 )
 
 func TestDeploys_List(t *testing.T) {
@@ -71,7 +73,7 @@ func TestDeploys_Create(t *testing.T) {
 			return
 		}
 
-		values, err := url.ParseQuery(body.String())
+		values, err := url.ParseQuery(string(body))
 		if err != nil {
 			t.Error(err)
 			return
