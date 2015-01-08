@@ -81,33 +81,33 @@ type Progress struct {
 
 // ItemCreateArgs represent the arguments that can be passed into Items.Create.
 type ItemCreateArgs struct {
-	Type        string     `json:"type,omitempty"        schema:"type,omitempty"`
-	Title       string     `json:"title,omitempty"       schema:"title,omitempty"`
-	Who         string     `json:"who,omitempty"         schema:"who,omitempty"`
-	What        string     `json:"what,omitempty"        schema:"what,omitempty"`
-	Why         string     `json:"why,omitempty"         schema:"why,omitempty"`
-	Description string     `json:"description,omitempty" schema:"description,omitempty"`
-	Score       ItemScore  `json:"score,emitempty"       schema:"score,omitempty"`
-	Status      ItemStatus `json:"status,emitempty"      schema:"status,omitempty"`
-	AssignedTo  int        `json:"assigned_to,omitempty" schema:"assigned_to,omitempty"`
-	Tags        []string   `json:"tags,omitempty"        schema:"tags,omitempty"`
+	Type        string     `url:"type,omitempty"        schema:"type,omitempty"`
+	Title       string     `url:"title,omitempty"       schema:"title,omitempty"`
+	Who         string     `url:"who,omitempty"         schema:"who,omitempty"`
+	What        string     `url:"what,omitempty"        schema:"what,omitempty"`
+	Why         string     `url:"why,omitempty"         schema:"why,omitempty"`
+	Description string     `url:"description,omitempty" schema:"description,omitempty"`
+	Score       ItemScore  `url:"score,emitempty"       schema:"score,omitempty"`
+	Status      ItemStatus `url:"status,emitempty"      schema:"status,omitempty"`
+	AssignedTo  int        `url:"assigned_to,omitempty" schema:"assigned_to,omitempty"`
+	Tags        []string   `url:"tags,comma,omitempty"        schema:"tags,omitempty"`
 }
 
 // ItemUpdateArgs represent the arguments that can be passed into Items.Update.
 //
 // This struct is the same as ItemCreateArgs, just the Parent field is extra.
 type ItemUpdateArgs struct {
-	Type        string     `json:"type,omitempty"        schema:"type,omitempty"`
-	Title       string     `json:"title,omitempty"       schema:"title,omitempty"`
-	Who         string     `json:"who,omitempty"         schema:"who,omitempty"`
-	What        string     `json:"what,omitempty"        schema:"what,omitempty"`
-	Why         string     `json:"why,omitempty"         schema:"why,omitempty"`
-	Description string     `json:"description,omitempty" schema:"description,omitempty"`
-	Score       ItemScore  `json:"score,emitempty"       schema:"score,omitempty"`
-	Status      ItemStatus `json:"status,emitempty"      schema:"status,omitempty"`
-	AssignedTo  int        `json:"assigned_to,omitempty" schema:"assigned_to,omitempty"`
-	Tags        []string   `json:"tags,omitempty"        schema:"tags,omitempty"`
-	Parent      int        `json:"parent,omitempty"      schema:"parent,omitempty"`
+	Type        string     `url:"type,omitempty"        schema:"type,omitempty"`
+	Title       string     `url:"title,omitempty"       schema:"title,omitempty"`
+	Who         string     `url:"who,omitempty"         schema:"who,omitempty"`
+	What        string     `url:"what,omitempty"        schema:"what,omitempty"`
+	Why         string     `url:"why,omitempty"         schema:"why,omitempty"`
+	Description string     `url:"description,omitempty" schema:"description,omitempty"`
+	Score       ItemScore  `url:"score,emitempty"       schema:"score,omitempty"`
+	Status      ItemStatus `url:"status,emitempty"      schema:"status,omitempty"`
+	AssignedTo  int        `url:"assigned_to,omitempty" schema:"assigned_to,omitempty"`
+	Tags        []string   `url:"tags,comma,omitempty"  schema:"tags,omitempty"`
+	Parent      int        `url:"parent,omitempty"      schema:"parent,omitempty"`
 }
 
 // ItemListArgs represents the arguments for the List method.
