@@ -1,7 +1,6 @@
 package sprintly
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"testing"
@@ -200,7 +199,7 @@ func TestItems_Update(t *testing.T) {
 		ensureMethod(t, r, "POST")
 
 		var got ItemUpdateArgs
-		if err := json.NewDecoder(r.Body).Decode(&got); err != nil {
+		if err := decodeArgs(&got, r.Body); err != nil {
 			t.Error(err)
 			return
 		}
@@ -211,7 +210,7 @@ func TestItems_Update(t *testing.T) {
 
 	item, _, err := client.Items.Update(1, 188, &args)
 	if err != nil {
-		t.Errorf("Items.Create failed: %v", err)
+		t.Errorf("Items.Update failed: %v", err)
 		return
 	}
 

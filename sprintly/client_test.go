@@ -1,9 +1,9 @@
 package sprintly
 
 import (
+	"fmt"
 	"io"
 	"io/ioutil"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
