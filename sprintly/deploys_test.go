@@ -64,7 +64,7 @@ func TestDeploys_Create(t *testing.T) {
 		ensureMethod(t, r, "POST")
 
 		var receivedArgs DeployCreateArgs
-		if err := decodeArgs(&receivedArgs, r.Body); err != nil {
+		if err := decodeArgs(&receivedArgs, r); err != nil {
 			t.Error(err)
 			return
 		}

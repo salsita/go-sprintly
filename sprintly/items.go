@@ -10,29 +10,29 @@ type ItemType string
 
 const (
 	ItemTypeStory  ItemType = "story"
-	ItemTypeTask            = "task"
-	ItemTypeDefect          = "defect"
-	ItemTypeTest            = "test"
+	ItemTypeTask   ItemType = "task"
+	ItemTypeDefect ItemType = "defect"
+	ItemTypeTest   ItemType = "test"
 )
 
 type ItemStatus string
 
 const (
 	ItemStatusSomeday    ItemStatus = "someday"
-	ItemStatusBacklog               = "backlog"
-	ItemStatusInProgress            = "in-progress"
-	ItemStatusCompleted             = "completed"
-	ItemStatusAccepted              = "accepted"
+	ItemStatusBacklog    ItemStatus = "backlog"
+	ItemStatusInProgress ItemStatus = "in-progress"
+	ItemStatusCompleted  ItemStatus = "completed"
+	ItemStatusAccepted   ItemStatus = "accepted"
 )
 
 type ItemScore string
 
 const (
 	ItemScoreNone      ItemScore = "~"
-	ItemScoreSmall               = "S"
-	ItemScoreMedium              = "M"
-	ItemScoreLarge               = "L"
-	ItemScoreVeryLarge           = "XL"
+	ItemScoreSmall     ItemScore = "S"
+	ItemScoreMedium    ItemScore = "M"
+	ItemScoreLarge     ItemScore = "L"
+	ItemScoreVeryLarge ItemScore = "XL"
 )
 
 type ItemOrdering string

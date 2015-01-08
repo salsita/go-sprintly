@@ -26,15 +26,12 @@ var testingTask = Item{
 	Description: "Require people to estimate the score of an item before they can start working on it.",
 	Score:       "M",
 	Status:      ItemStatusBacklog,
-	Tags: []string{
-		"scoring",
-		"backlog",
-	},
-	Product:    &testingProduct,
-	CreatedBy:  &testingUser,
-	AssignedTo: &testingUser,
-	Archived:   false,
-	Type:       "task",
+	Tags:        []string{"scoring"},
+	Product:     &testingProduct,
+	CreatedBy:   &testingUser,
+	AssignedTo:  &testingUser,
+	Archived:    false,
+	Type:        "task",
 }
 
 var testingTaskSlice []Item
@@ -78,8 +75,7 @@ var testingTaskString = `
 	},
 	"description": "Require people to estimate the score of an item before they can start working on it.",
 	"tags": [
-		"scoring",
-		"backlog"
+		"scoring"
 	],
 	"number": 188,
 	"archived": false,
@@ -123,7 +119,7 @@ func TestItems_Create(t *testing.T) {
 		ensureMethod(t, r, "POST")
 
 		var got ItemCreateArgs
-		if err := decodeArgs(&got, r.Body); err != nil {
+		if err := decodeArgs(&got, r); err != nil {
 			t.Error(err)
 			return
 		}
@@ -199,7 +195,7 @@ func TestItems_Update(t *testing.T) {
 		ensureMethod(t, r, "POST")
 
 		var got ItemUpdateArgs
-		if err := decodeArgs(&got, r.Body); err != nil {
+		if err := decodeArgs(&got, r); err != nil {
 			t.Error(err)
 			return
 		}

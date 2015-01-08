@@ -2,11 +2,8 @@ package sprintly
 
 import (
 	"fmt"
-	"io"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"reflect"
 	"testing"
 
@@ -49,18 +46,22 @@ func ensureEqual(t *testing.T, got, want interface{}) {
 	}
 }
 
-func decodeArgs(dst interface{}, r io.Reader) error {
-	content, err := ioutil.ReadAll(r)
-	if err != nil {
+func decodeArgs(dst interface{}, r *http.Request) error {
+	if err := r.ParseForm(); err != nil {
 		return err
 	}
 
-	fmt.Println(string(content))
+	decoder := schema.NewDecoder()
+	decoder.RegisterConverter(ItemStatusSomeday, func(value string) reflect.Value {
+		return reflect.ValueOf(ItemStatus(value))
+	})
+	decoder.RegisterConverter(ItemScoreNone, func(value string) reflect.Value {
+		return reflect.ValueOf(ItemScore(value))
+	})
 
-	values, err := url.ParseQuery(string(content))
+	err := decoder.Decode(dst, r.PostForm)
 	if err != nil {
-		return err
+		fmt.Println(map[string]error(err.(schema.MultiError)))
 	}
-
-	return schema.NewDecoder().Decode(dst, values)
+	return err
 }
