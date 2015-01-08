@@ -129,7 +129,7 @@ type ItemListArgs struct {
 func (srv ItemsService) Create(productId int, args *ItemCreateArgs) (*Item, *http.Response, error) {
 	u := fmt.Sprintf("products/%v/items.json", productId)
 
-	req, err := srv.client.NewRequest("POST", u, args)
+	req, err := srv.client.NewPostRequest(u, args)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -153,14 +153,10 @@ func (srv ItemsService) Create(productId int, args *ItemCreateArgs) (*Item, *htt
 // List can be used to list items for the given product according to the given arguments.
 //
 // See https://sprintly.uservoice.com/knowledgebase/articles/98412-items
-func (srv ItemsService) List(productId int, opt *ItemListArgs) ([]Item, *http.Response, error) {
+func (srv ItemsService) List(productId int, args *ItemListArgs) ([]Item, *http.Response, error) {
 	u := fmt.Sprintf("products/%v/items.json", productId)
-	u, err := addOptions(u, opt)
-	if err != nil {
-		return nil, nil, err
-	}
 
-	req, err := srv.client.NewRequest("GET", u, nil)
+	req, err := srv.client.NewGetRequest(u, args)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -187,7 +183,7 @@ func (srv ItemsService) List(productId int, opt *ItemListArgs) ([]Item, *http.Re
 func (srv ItemsService) Get(productId, itemNumber int) (*Item, *http.Response, error) {
 	u := fmt.Sprintf("products/%v/items/%v.json", productId, itemNumber)
 
-	req, err := srv.client.NewRequest("GET", u, nil)
+	req, err := srv.client.NewGetRequest(u, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -219,7 +215,7 @@ func (srv ItemsService) Update(
 
 	u := fmt.Sprintf("products/%v/items/%v.json", productId, itemNumber)
 
-	req, err := srv.client.NewRequest("POST", u, args)
+	req, err := srv.client.NewPostRequest(u, args)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -246,7 +242,7 @@ func (srv ItemsService) Update(
 func (srv ItemsService) ListChildren(productId, itemNumber int) ([]Item, *http.Response, error) {
 	u := fmt.Sprintf("products/%v/items/%v/children.json", productId, itemNumber)
 
-	req, err := srv.client.NewRequest("GET", u, nil)
+	req, err := srv.client.NewGetRequest(u, nil)
 	if err != nil {
 		return nil, nil, err
 	}

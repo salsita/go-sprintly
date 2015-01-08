@@ -14,24 +14,19 @@ import (
 	"github.com/google/go-querystring/query"
 )
 
-func appendArgs(urlString string, args interface{}) (string, error) {
+func appendArgs(u *url.URL, args interface{}) error {
 	v := reflect.ValueOf(args)
 	if v.Kind() == reflect.Ptr && v.IsNil() {
-		return urlString, nil
-	}
-
-	u, err := url.Parse(urlString)
-	if err != nil {
-		return "", err
+		return nil
 	}
 
 	values, err := query.Values(args)
 	if err != nil {
-		return "", err
+		return err
 	}
 
 	u.RawQuery = values.Encode()
-	return u.String(), nil
+	return nil
 }
 
 func encodeArgs(args interface{}) (io.Reader, error) {

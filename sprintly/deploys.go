@@ -51,14 +51,16 @@ func (srv DeploysService) List(productId int, args *DeployListArgs) ([]Deploy, *
 	return deploys, resp, nil
 }
 
+type DeployCreateArgs struct {
+	Environment string `url:"environment"   schema:"environment"`
+	ItemNumbers []int  `url:"numbers,comma" schema:"numbers"`
+}
+
 // Create can be used to create a new deployment for the given product.
 //
 // See https://sprintly.uservoice.com/knowledgebase/articles/138392-deploys
 func (srv DeploysService) Create(productId int, args *DeployCreateArgs) ([]Deploy, *http.Response, error) {
 	u := fmt.Sprintf("products/%v/deploys.json", productId)
-	if err != nil {
-		return nil, nil, err
-	}
 
 	req, err := srv.client.NewPostRequest(u, args)
 	if err != nil {

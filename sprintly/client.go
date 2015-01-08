@@ -1,12 +1,9 @@
 package sprintly
 
 import (
-	"bytes"
 	"encoding/json"
 	"net/http"
 	"net/url"
-
-	"github.com/google/go-querystring/query"
 )
 
 const (
@@ -88,15 +85,14 @@ func (c *Client) SetHttpClient(client *http.Client) {
 //
 // In case the args object is not nil, it is encoded using github.com/google/go-querystring/query
 // and the resulting string is appended to the URL.
-func (c *Client) NewGetRequest(method, urlPath string, args interface{}) (*http.Request, error) {
+func (c *Client) NewGetRequest(urlPath string, args interface{}) (*http.Request, error) {
 	path, err := url.Parse(urlPath)
 	if err != nil {
 		return nil, err
 	}
 
 	u := c.baseURL.ResolveReference(path)
-	u, err := appendArgs(u, args)
-	if err != nil {
+	if err := appendArgs(u, args); err != nil {
 		return nil, err
 	}
 
@@ -115,7 +111,7 @@ func (c *Client) NewGetRequest(method, urlPath string, args interface{}) (*http.
 // In case the args object is not nil, it is encoded using github.com/google/go-querystring/query
 // and the resulting string is inserted into the request body. The content type is then set to
 // application/x-www-form-urlencoded.
-func (c *Client) NewPostRequest(method, urlPath string, args interface{}) (*http.Request, error) {
+func (c *Client) NewPostRequest(urlPath string, args interface{}) (*http.Request, error) {
 	path, err := url.Parse(urlPath)
 	if err != nil {
 		return nil, err
