@@ -124,7 +124,7 @@ func TestItems_Create(t *testing.T) {
 		ensureMethod(t, r, "POST")
 
 		var got ItemCreateArgs
-		if err := json.NewDecoder(r.Body).Decode(&got); err != nil {
+		if err := decodeArgs(&got, r.Body); err != nil {
 			t.Error(err)
 			return
 		}

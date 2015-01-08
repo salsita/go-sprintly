@@ -81,46 +81,46 @@ type Progress struct {
 
 // ItemCreateArgs represent the arguments that can be passed into Items.Create.
 type ItemCreateArgs struct {
-	Type        string     `json:"type,omitempty"`
-	Title       string     `json:"title,omitempty"`
-	Who         string     `json:"who,omitempty"`
-	What        string     `json:"what,omitempty"`
-	Why         string     `json:"why,omitempty"`
-	Description string     `json:"description,omitempty"`
-	Score       ItemScore  `json:"score,emitempty"`
-	Status      ItemStatus `json:"status,emitempty"`
-	AssignedTo  int        `json:"assigned_to,omitempty"`
-	Tags        []string   `json:"tags,omitempty"`
+	Type        string     `json:"type,omitempty"        schema:"type,omitempty"`
+	Title       string     `json:"title,omitempty"       schema:"title,omitempty"`
+	Who         string     `json:"who,omitempty"         schema:"who,omitempty"`
+	What        string     `json:"what,omitempty"        schema:"what,omitempty"`
+	Why         string     `json:"why,omitempty"         schema:"why,omitempty"`
+	Description string     `json:"description,omitempty" schema:"description,omitempty"`
+	Score       ItemScore  `json:"score,emitempty"       schema:"score,omitempty"`
+	Status      ItemStatus `json:"status,emitempty"      schema:"status,omitempty"`
+	AssignedTo  int        `json:"assigned_to,omitempty" schema:"assigned_to,omitempty"`
+	Tags        []string   `json:"tags,omitempty"        schema:"tags,omitempty"`
 }
 
 // ItemUpdateArgs represent the arguments that can be passed into Items.Update.
 //
 // This struct is the same as ItemCreateArgs, just the Parent field is extra.
 type ItemUpdateArgs struct {
-	Type        string     `json:"type,omitempty"`
-	Title       string     `json:"title,omitempty"`
-	Who         string     `json:"who,omitempty"`
-	What        string     `json:"what,omitempty"`
-	Why         string     `json:"why,omitempty"`
-	Description string     `json:"description,omitempty"`
-	Score       ItemScore  `json:"score,emitempty"`
-	Status      ItemStatus `json:"status,emitempty"`
-	AssignedTo  int        `json:"assigned_to,omitempty"`
-	Tags        []string   `json:"tags,omitempty"`
-	Parent      int        `json:"parent,omitempty"`
+	Type        string     `json:"type,omitempty"        schema:"type,omitempty"`
+	Title       string     `json:"title,omitempty"       schema:"title,omitempty"`
+	Who         string     `json:"who,omitempty"         schema:"who,omitempty"`
+	What        string     `json:"what,omitempty"        schema:"what,omitempty"`
+	Why         string     `json:"why,omitempty"         schema:"why,omitempty"`
+	Description string     `json:"description,omitempty" schema:"description,omitempty"`
+	Score       ItemScore  `json:"score,emitempty"       schema:"score,omitempty"`
+	Status      ItemStatus `json:"status,emitempty"      schema:"status,omitempty"`
+	AssignedTo  int        `json:"assigned_to,omitempty" schema:"assigned_to,omitempty"`
+	Tags        []string   `json:"tags,omitempty"        schema:"tags,omitempty"`
+	Parent      int        `json:"parent,omitempty"      schema:"parent,omitempty"`
 }
 
 // ItemListArgs represents the arguments for the List method.
 type ItemListArgs struct {
-	Type       []ItemType   `url:"type,comma,omitempty"`
-	Status     []ItemStatus `url:"status,comma,omitempty"`
-	Offset     int          `url:"offset,omitempty"`
-	Limit      int          `url:"limit,omitempty"`
-	OrderBy    ItemOrdering `url:"order_by,omitempty"`
-	AssignedTo int          `url:"assigned_to,omitempty"`
-	CreatedBy  int          `url:"created_by,omitempty"`
-	Tags       []string     `url:"tags,comma,omitempty"`
-	Children   bool         `url:"children,omitempty"`
+	Type       []ItemType   `url:"type,comma,omitempty"   schema:"type,omitempty"`
+	Status     []ItemStatus `url:"status,comma,omitempty" schema:"status,omitempty"`
+	Offset     int          `url:"offset,omitempty"       schema:"offset,omitempty"`
+	Limit      int          `url:"limit,omitempty"        schema:"limit,omitempty"`
+	OrderBy    ItemOrdering `url:"order_by,omitempty"     schema:"order_by,omitempty"`
+	AssignedTo int          `url:"assigned_to,omitempty"  schema:"assigned_to,omitempty"`
+	CreatedBy  int          `url:"created_by,omitempty"   schema:"created_by,omitempty"`
+	Tags       []string     `url:"tags,comma,omitempty"   schema:"tags,omitempty"`
+	Children   bool         `url:"children,omitempty"     schema:"children,omitempty"`
 }
 
 // Create can be used to create new items.

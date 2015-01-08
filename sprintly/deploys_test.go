@@ -2,12 +2,8 @@ package sprintly
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/http"
-	"net/url"
 	"testing"
-
-	"github.com/gorilla/schema"
 )
 
 var testingDeploy = Deploy{
@@ -67,20 +63,8 @@ func TestDeploys_Create(t *testing.T) {
 	mux.HandleFunc("/products/1/deploys.json", func(w http.ResponseWriter, r *http.Request) {
 		ensureMethod(t, r, "POST")
 
-		body, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			t.Error(err)
-			return
-		}
-
-		values, err := url.ParseQuery(string(body))
-		if err != nil {
-			t.Error(err)
-			return
-		}
-
 		var receivedArgs DeployCreateArgs
-		if err := schema.NewDecoder().Decode(&receivedArgs, values); err != nil {
+		if err := decodeArgs(&receivedArgs, r.Body); err != nil {
 			t.Error(err)
 			return
 		}
