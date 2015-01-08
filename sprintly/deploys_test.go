@@ -16,7 +16,7 @@ var testingDeploy = Deploy{
 	},
 }
 
-var testingDeployString = `
+var testingDeployJson = `
 {
 	"environment": "staging",
 	"items": [
@@ -29,8 +29,8 @@ var testingDeployString = `
 `
 
 var (
-	testingDeploySlice       = []Deploy{testingDeploy}
-	testingDeploySliceString = fmt.Sprintf("[%v]", testingDeployString)
+	testingDeploySlice     = []Deploy{testingDeploy}
+	testingDeploySliceJson = fmt.Sprintf("[%v]", testingDeployJson)
 )
 
 func TestDeploys_List(t *testing.T) {
@@ -39,7 +39,7 @@ func TestDeploys_List(t *testing.T) {
 
 	mux.HandleFunc("/products/1/deploys.json", func(w http.ResponseWriter, r *http.Request) {
 		ensureMethod(t, r, "GET")
-		fmt.Fprint(w, testingDeploySliceString)
+		fmt.Fprint(w, testingDeploySliceJson)
 	})
 
 	deploys, _, err := client.Deploys.List(1, nil)
@@ -49,4 +49,35 @@ func TestDeploys_List(t *testing.T) {
 	}
 
 	ensureEqual(t, deploys, testingDeploySlice)
+}
+
+func TestDeploys_Create(t *testing.T) {
+	client, server, mux := setup()
+	defer server.Close()
+
+	args := DeployCreateArgs{
+		Environment: "staging",
+		ItemNumbers: []int{1, 2, 3, 4, 5},
+	}
+
+	mux.HandleFunc("/products/1/deploys.json", func(w http.ResponseWriter, r *http.Request) {
+		ensureMethod(t, r, "POST")
+
+		var receivedArgs DeployCreateArgs
+		if err := decodeArgs(&receivedArgs, r); err != nil {
+			t.Error(err)
+			return
+		}
+
+		ensureEqual(t, &receivedArgs, &args)
+		fmt.Fprint(w, testingDeployJson)
+	})
+
+	deploy, _, err := client.Deploys.Create(1, &args)
+	if err != nil {
+		t.Errorf("Deploys.Create failed: %v", err)
+		return
+	}
+
+	ensureEqual(t, deploy, &testingDeploy)
 }

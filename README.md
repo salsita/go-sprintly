@@ -16,9 +16,9 @@ The following pieces need to be implemented:
 - [ ] Attachments
 - [ ] Blocking
 - [ ] Comments
-- [ ] Deploys
+- [ ] Deploys (methods implemented, resource structs incomplete)
 - [ ] Favorites
-- [X] Items
+- [ ] Items (methods implemented, resource structs incomplete)
 - [ ] People
 - [ ] Products
 - [ ] Tags
