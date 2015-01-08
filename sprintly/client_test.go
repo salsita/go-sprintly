@@ -3,6 +3,7 @@ package sprintly
 import (
 	"io"
 	"io/ioutil"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -53,6 +54,8 @@ func decodeArgs(dst interface{}, r io.Reader) error {
 	if err != nil {
 		return err
 	}
+
+	fmt.Println(string(content))
 
 	values, err := url.ParseQuery(string(content))
 	if err != nil {

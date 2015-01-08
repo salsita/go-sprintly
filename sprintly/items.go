@@ -87,10 +87,10 @@ type ItemCreateArgs struct {
 	What        string     `url:"what,omitempty"        schema:"what,omitempty"`
 	Why         string     `url:"why,omitempty"         schema:"why,omitempty"`
 	Description string     `url:"description,omitempty" schema:"description,omitempty"`
-	Score       ItemScore  `url:"score,emitempty"       schema:"score,omitempty"`
-	Status      ItemStatus `url:"status,emitempty"      schema:"status,omitempty"`
+	Score       ItemScore  `url:"score,omitempty"       schema:"score,omitempty"`
+	Status      ItemStatus `url:"status,omitempty"      schema:"status,omitempty"`
 	AssignedTo  int        `url:"assigned_to,omitempty" schema:"assigned_to,omitempty"`
-	Tags        []string   `url:"tags,comma,omitempty"        schema:"tags,omitempty"`
+	Tags        []string   `url:"tags,comma,omitempty"  schema:"tags,omitempty"`
 }
 
 // ItemUpdateArgs represent the arguments that can be passed into Items.Update.
@@ -103,8 +103,8 @@ type ItemUpdateArgs struct {
 	What        string     `url:"what,omitempty"        schema:"what,omitempty"`
 	Why         string     `url:"why,omitempty"         schema:"why,omitempty"`
 	Description string     `url:"description,omitempty" schema:"description,omitempty"`
-	Score       ItemScore  `url:"score,emitempty"       schema:"score,omitempty"`
-	Status      ItemStatus `url:"status,emitempty"      schema:"status,omitempty"`
+	Score       ItemScore  `url:"score,omitempty"       schema:"score,omitempty"`
+	Status      ItemStatus `url:"status,omitempty"      schema:"status,omitempty"`
 	AssignedTo  int        `url:"assigned_to,omitempty" schema:"assigned_to,omitempty"`
 	Tags        []string   `url:"tags,comma,omitempty"  schema:"tags,omitempty"`
 	Parent      int        `url:"parent,omitempty"      schema:"parent,omitempty"`
