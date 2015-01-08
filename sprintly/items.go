@@ -10,29 +10,29 @@ type ItemType string
 
 const (
 	ItemTypeStory  ItemType = "story"
-	ItemTypeTask            = "task"
-	ItemTypeDefect          = "defect"
-	ItemTypeTest            = "test"
+	ItemTypeTask   ItemType = "task"
+	ItemTypeDefect ItemType = "defect"
+	ItemTypeTest   ItemType = "test"
 )
 
 type ItemStatus string
 
 const (
 	ItemStatusSomeday    ItemStatus = "someday"
-	ItemStatusBacklog               = "backlog"
-	ItemStatusInProgress            = "in-progress"
-	ItemStatusCompleted             = "completed"
-	ItemStatusAccepted              = "accepted"
+	ItemStatusBacklog    ItemStatus = "backlog"
+	ItemStatusInProgress ItemStatus = "in-progress"
+	ItemStatusCompleted  ItemStatus = "completed"
+	ItemStatusAccepted   ItemStatus = "accepted"
 )
 
 type ItemScore string
 
 const (
 	ItemScoreNone      ItemScore = "~"
-	ItemScoreSmall               = "S"
-	ItemScoreMedium              = "M"
-	ItemScoreLarge               = "L"
-	ItemScoreVeryLarge           = "XL"
+	ItemScoreSmall     ItemScore = "S"
+	ItemScoreMedium    ItemScore = "M"
+	ItemScoreLarge     ItemScore = "L"
+	ItemScoreVeryLarge ItemScore = "XL"
 )
 
 type ItemOrdering string
@@ -81,46 +81,46 @@ type Progress struct {
 
 // ItemCreateArgs represent the arguments that can be passed into Items.Create.
 type ItemCreateArgs struct {
-	Type        string     `json:"type,omitempty"`
-	Title       string     `json:"title,omitempty"`
-	Who         string     `json:"who,omitempty"`
-	What        string     `json:"what,omitempty"`
-	Why         string     `json:"why,omitempty"`
-	Description string     `json:"description,omitempty"`
-	Score       ItemScore  `json:"score,emitempty"`
-	Status      ItemStatus `json:"status,emitempty"`
-	AssignedTo  int        `json:"assigned_to,omitempty"`
-	Tags        []string   `json:"tags,omitempty"`
+	Type        string     `url:"type,omitempty"        schema:"type,omitempty"`
+	Title       string     `url:"title,omitempty"       schema:"title,omitempty"`
+	Who         string     `url:"who,omitempty"         schema:"who,omitempty"`
+	What        string     `url:"what,omitempty"        schema:"what,omitempty"`
+	Why         string     `url:"why,omitempty"         schema:"why,omitempty"`
+	Description string     `url:"description,omitempty" schema:"description,omitempty"`
+	Score       ItemScore  `url:"score,omitempty"       schema:"score,omitempty"`
+	Status      ItemStatus `url:"status,omitempty"      schema:"status,omitempty"`
+	AssignedTo  int        `url:"assigned_to,omitempty" schema:"assigned_to,omitempty"`
+	Tags        []string   `url:"tags,comma,omitempty"  schema:"tags,omitempty"`
 }
 
 // ItemUpdateArgs represent the arguments that can be passed into Items.Update.
 //
 // This struct is the same as ItemCreateArgs, just the Parent field is extra.
 type ItemUpdateArgs struct {
-	Type        string     `json:"type,omitempty"`
-	Title       string     `json:"title,omitempty"`
-	Who         string     `json:"who,omitempty"`
-	What        string     `json:"what,omitempty"`
-	Why         string     `json:"why,omitempty"`
-	Description string     `json:"description,omitempty"`
-	Score       ItemScore  `json:"score,emitempty"`
-	Status      ItemStatus `json:"status,emitempty"`
-	AssignedTo  int        `json:"assigned_to,omitempty"`
-	Tags        []string   `json:"tags,omitempty"`
-	Parent      int        `json:"parent,omitempty"`
+	Type        string     `url:"type,omitempty"        schema:"type,omitempty"`
+	Title       string     `url:"title,omitempty"       schema:"title,omitempty"`
+	Who         string     `url:"who,omitempty"         schema:"who,omitempty"`
+	What        string     `url:"what,omitempty"        schema:"what,omitempty"`
+	Why         string     `url:"why,omitempty"         schema:"why,omitempty"`
+	Description string     `url:"description,omitempty" schema:"description,omitempty"`
+	Score       ItemScore  `url:"score,omitempty"       schema:"score,omitempty"`
+	Status      ItemStatus `url:"status,omitempty"      schema:"status,omitempty"`
+	AssignedTo  int        `url:"assigned_to,omitempty" schema:"assigned_to,omitempty"`
+	Tags        []string   `url:"tags,comma,omitempty"  schema:"tags,omitempty"`
+	Parent      int        `url:"parent,omitempty"      schema:"parent,omitempty"`
 }
 
 // ItemListArgs represents the arguments for the List method.
 type ItemListArgs struct {
-	Type       []ItemType   `url:"type,comma,omitempty"`
-	Status     []ItemStatus `url:"status,comma,omitempty"`
-	Offset     int          `url:"offset,omitempty"`
-	Limit      int          `url:"limit,omitempty"`
-	OrderBy    ItemOrdering `url:"order_by,omitempty"`
-	AssignedTo int          `url:"assigned_to,omitempty"`
-	CreatedBy  int          `url:"created_by,omitempty"`
-	Tags       []string     `url:"tags,comma,omitempty"`
-	Children   bool         `url:"children,omitempty"`
+	Type       []ItemType   `url:"type,comma,omitempty"   schema:"type,omitempty"`
+	Status     []ItemStatus `url:"status,comma,omitempty" schema:"status,omitempty"`
+	Offset     int          `url:"offset,omitempty"       schema:"offset,omitempty"`
+	Limit      int          `url:"limit,omitempty"        schema:"limit,omitempty"`
+	OrderBy    ItemOrdering `url:"order_by,omitempty"     schema:"order_by,omitempty"`
+	AssignedTo int          `url:"assigned_to,omitempty"  schema:"assigned_to,omitempty"`
+	CreatedBy  int          `url:"created_by,omitempty"   schema:"created_by,omitempty"`
+	Tags       []string     `url:"tags,comma,omitempty"   schema:"tags,omitempty"`
+	Children   bool         `url:"children,omitempty"     schema:"children,omitempty"`
 }
 
 // Create can be used to create new items.
@@ -129,7 +129,7 @@ type ItemListArgs struct {
 func (srv ItemsService) Create(productId int, args *ItemCreateArgs) (*Item, *http.Response, error) {
 	u := fmt.Sprintf("products/%v/items.json", productId)
 
-	req, err := srv.client.NewRequest("POST", u, args)
+	req, err := srv.client.NewPostRequest(u, args)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -153,14 +153,10 @@ func (srv ItemsService) Create(productId int, args *ItemCreateArgs) (*Item, *htt
 // List can be used to list items for the given product according to the given arguments.
 //
 // See https://sprintly.uservoice.com/knowledgebase/articles/98412-items
-func (srv ItemsService) List(productId int, opt *ItemListArgs) ([]Item, *http.Response, error) {
+func (srv ItemsService) List(productId int, args *ItemListArgs) ([]Item, *http.Response, error) {
 	u := fmt.Sprintf("products/%v/items.json", productId)
-	u, err := addOptions(u, opt)
-	if err != nil {
-		return nil, nil, err
-	}
 
-	req, err := srv.client.NewRequest("GET", u, nil)
+	req, err := srv.client.NewGetRequest(u, args)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -187,7 +183,7 @@ func (srv ItemsService) List(productId int, opt *ItemListArgs) ([]Item, *http.Re
 func (srv ItemsService) Get(productId, itemNumber int) (*Item, *http.Response, error) {
 	u := fmt.Sprintf("products/%v/items/%v.json", productId, itemNumber)
 
-	req, err := srv.client.NewRequest("GET", u, nil)
+	req, err := srv.client.NewGetRequest(u, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -219,7 +215,7 @@ func (srv ItemsService) Update(
 
 	u := fmt.Sprintf("products/%v/items/%v.json", productId, itemNumber)
 
-	req, err := srv.client.NewRequest("POST", u, args)
+	req, err := srv.client.NewPostRequest(u, args)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -246,7 +242,7 @@ func (srv ItemsService) Update(
 func (srv ItemsService) ListChildren(productId, itemNumber int) ([]Item, *http.Response, error) {
 	u := fmt.Sprintf("products/%v/items/%v/children.json", productId, itemNumber)
 
-	req, err := srv.client.NewRequest("GET", u, nil)
+	req, err := srv.client.NewGetRequest(u, nil)
 	if err != nil {
 		return nil, nil, err
 	}

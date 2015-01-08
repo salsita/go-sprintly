@@ -1,11 +1,13 @@
 package sprintly
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
 	"testing"
 
+	"github.com/gorilla/schema"
 	"github.com/kr/pretty"
 )
 
@@ -42,4 +44,24 @@ func ensureEqual(t *testing.T, got, want interface{}) {
 		t.Errorf("Objects not equal!\n\ngot = %# v\n\nwant = %# v \n",
 			pretty.Formatter(got), pretty.Formatter(want))
 	}
+}
+
+func decodeArgs(dst interface{}, r *http.Request) error {
+	if err := r.ParseForm(); err != nil {
+		return err
+	}
+
+	decoder := schema.NewDecoder()
+	decoder.RegisterConverter(ItemStatusSomeday, func(value string) reflect.Value {
+		return reflect.ValueOf(ItemStatus(value))
+	})
+	decoder.RegisterConverter(ItemScoreNone, func(value string) reflect.Value {
+		return reflect.ValueOf(ItemScore(value))
+	})
+
+	err := decoder.Decode(dst, r.PostForm)
+	if err != nil {
+		fmt.Println(map[string]error(err.(schema.MultiError)))
+	}
+	return err
 }

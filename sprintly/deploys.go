@@ -21,20 +21,16 @@ type Deploy struct {
 }
 
 type DeployListArgs struct {
-	Environment string `json:"environment,omitempty"`
+	Environment string `url:"environment,omitempty"`
 }
 
 // List can be used to list deploys for the given product.
 //
 // See https://sprintly.uservoice.com/knowledgebase/articles/138392-deploys
-func (srv DeploysService) List(productId int, opt *DeployListArgs) ([]Deploy, *http.Response, error) {
+func (srv DeploysService) List(productId int, args *DeployListArgs) ([]Deploy, *http.Response, error) {
 	u := fmt.Sprintf("products/%v/deploys.json", productId)
-	u, err := addOptions(u, opt)
-	if err != nil {
-		return nil, nil, err
-	}
 
-	req, err := srv.client.NewRequest("GET", u, nil)
+	req, err := srv.client.NewGetRequest(u, args)
 	if err != nil {
 		return nil, nil, err
 	}

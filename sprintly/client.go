@@ -1,7 +1,6 @@
 package sprintly
 
 import (
-	"bytes"
 	"encoding/json"
 	"net/http"
 	"net/url"
@@ -82,10 +81,37 @@ func (c *Client) SetHttpClient(client *http.Client) {
 	c.client = client
 }
 
-// NewRequest returns a new API requests for the given method and relative URL.
+// NewGetRequest returns a new GET API request for the given relative URL.
 //
-// In case the body object is not nil, it is marshaled and send in the request body.
-func (c *Client) NewRequest(method, urlPath string, body interface{}) (*http.Request, error) {
+// In case the args object is not nil, it is encoded using github.com/google/go-querystring/query
+// and the resulting string is appended to the URL.
+func (c *Client) NewGetRequest(urlPath string, args interface{}) (*http.Request, error) {
+	path, err := url.Parse(urlPath)
+	if err != nil {
+		return nil, err
+	}
+
+	u := c.baseURL.ResolveReference(path)
+	if err := appendArgs(u, args); err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req.SetBasicAuth(c.username, c.token)
+	req.Header.Set("User-Agent", c.userAgent)
+	return req, nil
+}
+
+// NewPostRequest returns a new POST API request for the given relative URL and arguments.
+//
+// In case the args object is not nil, it is encoded using github.com/google/go-querystring/query
+// and the resulting string is inserted into the request body. The content type is then set to
+// application/x-www-form-urlencoded.
+func (c *Client) NewPostRequest(urlPath string, args interface{}) (*http.Request, error) {
 	path, err := url.Parse(urlPath)
 	if err != nil {
 		return nil, err
@@ -93,21 +119,19 @@ func (c *Client) NewRequest(method, urlPath string, body interface{}) (*http.Req
 
 	u := c.baseURL.ResolveReference(path)
 
-	var bodyBuffer bytes.Buffer
-	if body != nil {
-		if err := json.NewEncoder(&bodyBuffer).Encode(body); err != nil {
-			return nil, err
-		}
+	body, err := encodeArgs(args)
+	if err != nil {
+		return nil, err
 	}
 
-	req, err := http.NewRequest(method, u.String(), &bodyBuffer)
+	req, err := http.NewRequest("POST", u.String(), body)
 	if err != nil {
 		return nil, err
 	}
 
 	req.SetBasicAuth(c.username, c.token)
-	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("User-Agent", c.userAgent)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	return req, nil
 }
 

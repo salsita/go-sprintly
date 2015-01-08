@@ -1,7 +1,6 @@
 package sprintly
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"testing"
@@ -27,15 +26,12 @@ var testingTask = Item{
 	Description: "Require people to estimate the score of an item before they can start working on it.",
 	Score:       "M",
 	Status:      ItemStatusBacklog,
-	Tags: []string{
-		"scoring",
-		"backlog",
-	},
-	Product:    &testingProduct,
-	CreatedBy:  &testingUser,
-	AssignedTo: &testingUser,
-	Archived:   false,
-	Type:       "task",
+	Tags:        []string{"scoring"},
+	Product:     &testingProduct,
+	CreatedBy:   &testingUser,
+	AssignedTo:  &testingUser,
+	Archived:    false,
+	Type:        "task",
 }
 
 var testingTaskSlice []Item
@@ -79,8 +75,7 @@ var testingTaskString = `
 	},
 	"description": "Require people to estimate the score of an item before they can start working on it.",
 	"tags": [
-		"scoring",
-		"backlog"
+		"scoring"
 	],
 	"number": 188,
 	"archived": false,
@@ -124,7 +119,7 @@ func TestItems_Create(t *testing.T) {
 		ensureMethod(t, r, "POST")
 
 		var got ItemCreateArgs
-		if err := json.NewDecoder(r.Body).Decode(&got); err != nil {
+		if err := decodeArgs(&got, r); err != nil {
 			t.Error(err)
 			return
 		}
@@ -200,7 +195,7 @@ func TestItems_Update(t *testing.T) {
 		ensureMethod(t, r, "POST")
 
 		var got ItemUpdateArgs
-		if err := json.NewDecoder(r.Body).Decode(&got); err != nil {
+		if err := decodeArgs(&got, r); err != nil {
 			t.Error(err)
 			return
 		}
@@ -211,7 +206,7 @@ func TestItems_Update(t *testing.T) {
 
 	item, _, err := client.Items.Update(1, 188, &args)
 	if err != nil {
-		t.Errorf("Items.Create failed: %v", err)
+		t.Errorf("Items.Update failed: %v", err)
 		return
 	}
 
