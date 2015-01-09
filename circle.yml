@@ -2,6 +2,7 @@ dependencies:
   override:
     - "go get github.com/kr/pretty"
     - "go get github.com/google/go-querystring/query"
+    - "go get github.com/gorilla/schema"
     - "go get github.com/mattn/goveralls"
 test:
   override:
