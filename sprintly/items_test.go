@@ -14,6 +14,18 @@ var testingUser = User{
 	LastName:  "Stump",
 }
 
+var testingUserJson = `
+{
+	"id": 1,
+	"email": "joe@joestump.net",
+	"first_name": "Joe",
+	"last_name": "Stump"
+}`
+
+var testingUserSlice = []User{testingUser}
+
+var testingUserSliceJson = fmt.Sprintf("[%v]", testingUserJson)
+
 var testingProduct = Product{
 	Id:       1,
 	Name:     "sprint.ly",

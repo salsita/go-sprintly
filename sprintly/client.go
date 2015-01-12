@@ -29,6 +29,9 @@ type Client struct {
 	// User-Agent header to use when making API calls.
 	userAgent string
 
+	// The People service.
+	People *PeopleService
+
 	// The Items service.
 	Items *ItemsService
 
@@ -47,6 +50,7 @@ func NewClient(username, token string) *Client {
 		baseURL:   baseURL,
 		userAgent: DefaultUserAgent,
 	}
+	client.People = newPeopleService(client)
 	client.Items = newItemsService(client)
 	client.Deploys = newDeploysService(client)
 	return client
@@ -133,6 +137,25 @@ func (c *Client) NewPostRequest(urlPath string, args interface{}) (*http.Request
 	req.SetBasicAuth(c.username, c.token)
 	req.Header.Set("User-Agent", c.userAgent)
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	return req, nil
+}
+
+// NewDeleteRequest return a new DELETE API request for the given relative URL.
+func (c *Client) NewDeleteRequest(urlPath string) (*http.Request, error) {
+	path, err := url.Parse(urlPath)
+	if err != nil {
+		return nil, err
+	}
+
+	u := c.baseURL.ResolveReference(path)
+
+	req, err := http.NewRequest("DELETE", u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req.SetBasicAuth(c.username, c.token)
+	req.Header.Set("User-Agent", c.userAgent)
 	return req, nil
 }
 
