@@ -41,6 +41,7 @@ type Client struct {
 func NewClient(username, token string) *Client {
 	baseURL, _ := url.Parse(DefaultBaseURL)
 	client := &Client{
+		username:  username,
 		token:     token,
 		client:    http.DefaultClient,
 		baseURL:   baseURL,
