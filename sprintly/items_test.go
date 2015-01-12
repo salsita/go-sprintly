@@ -63,7 +63,7 @@ func init() {
 		panic(err)
 	}
 
-	testingTask.Progress = &Progress{
+	testingTask.Progress = &ItemProgress{
 		StartedAt:  &startedAt,
 		AcceptedAt: &acceptedAt,
 		ClosedAt:   &closedAt,

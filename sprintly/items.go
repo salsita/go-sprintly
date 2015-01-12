@@ -58,25 +58,49 @@ func newItemsService(client *Client) *ItemsService {
 
 // Item represents a Sprintly item.
 type Item struct {
-	Number      int        `json:"number,omitempty"`
-	Title       string     `json:"title,omitempty"`
-	Description string     `json:"description,omitempty"`
-	Score       ItemScore  `json:"score,omitempty"`
-	Status      ItemStatus `json:"status,omitempty"`
-	Tags        []string   `json:"tags,omitempty"`
-	Product     *Product   `json:"product,omitempty"`
-	Progress    *Progress  `json:"progress,omitempty"`
-	CreatedBy   *User      `json:"created_by,omitempty"`
-	AssignedTo  *User      `json:"assigned_to,omitempty"`
-	Archived    bool       `json:"archived,omitempty"`
-	Type        string     `json:"type,omitempty"`
+	// Common fields.
+	Number       int           `json:"number,omitempty"`
+	Type         string        `json:"type,omitempty"`
+	Title        string        `json:"title,omitempty"`
+	Description  string        `json:"description,omitempty"`
+	Score        ItemScore     `json:"score,omitempty"`
+	Status       ItemStatus    `json:"status,omitempty"`
+	Tags         []string      `json:"tags,omitempty"`
+	ShortURL     string        `json:"short_url,omitempty"`
+	Product      *Product      `json:"product,omitempty"`
+	Progress     *ItemProgress `json:"progress,omitempty"`
+	CreatedAt    *time.Time    `json:"created_at,omitempty"`
+	CreatedBy    *User         `json:"created_by,omitempty"`
+	AssignedTo   *User         `json:"assigned_to,omitempty"`
+	Counts       *ItemCounts   `json:"counts,omitempty"`
+	Email        *ItemEmail    `json:"email,omitempty"`
+	LastModified *time.Time    `json:"last_modified,omitempty"`
+	Archived     bool          `json:"archived,omitempty"`
+
+	// Stories only.
+	Who  string `json:"who,omitempty"`
+	What string `json:"what,omitempty"`
+	Why  string `json:"why,omitempty"`
 }
 
 // Progress represents a Sprintly item progress.
-type Progress struct {
+type ItemProgress struct {
+	TriagedAt  *time.Time `json:"triaged_at,omitempty"`
 	StartedAt  *time.Time `json:"started_at,omitempty"`
 	AcceptedAt *time.Time `json:"accepted_at,omitempty"`
 	ClosedAt   *time.Time `json:"closed_at,omitempty"`
+}
+
+type ItemCounts struct {
+	Blockers  int `json:"blockers,omitempty"`
+	Blocking  int `json:"blocking,omitempty"`
+	Comments  int `json:"comments,omitempty"`
+	Favorites int `json:"favorites,omitempty"`
+}
+
+type ItemEmail struct {
+	Discussion string `json:"discussion,omitempty"`
+	Files      string `json:"files,omitempty"`
 }
 
 // ItemCreateArgs represent the arguments that can be passed into Items.Create.
