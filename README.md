@@ -19,7 +19,7 @@ The following pieces need to be implemented:
 - [ ] Deploys (methods implemented, resource structs incomplete)
 - [ ] Favorites
 - [ ] Items (methods implemented, resource structs incomplete)
-- [ ] People
+- [X] People
 - [ ] Products
 - [ ] Tags
 
